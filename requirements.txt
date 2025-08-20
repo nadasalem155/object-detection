@@ -1,4 +1,3 @@
 streamlit>=1.24.1
 ultralytics>=8.0.162
 opencv-python>=4.9.0
-
