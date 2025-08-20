@@ -4,30 +4,35 @@ import cv2
 import numpy as np
 from ultralytics import YOLO
 
+# Load YOLOv8 model
 model = YOLO("yolov8n.pt")
 
-st.title("YOLOv8 Live Detection")
+st.title("YOLOv8 Live Detection (Web)")
 
+# RTC configuration for WebRTC
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
 
+# Video processor class
 class YOLOProcessor(VideoProcessorBase):
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        results = model(img, conf=0.4)
-        for result in results:
-            for box in result.boxes:
+        # Resize for faster processing
+        img_small = cv2.resize(img, (640, 360))
+        results = model(img_small, conf=0.4, verbose=False)
+        for r in results:
+            for box in r.boxes:
                 x1, y1, x2, y2 = map(int, box.xyxy[0])
-                label = model.names[int(box.cls[0])]
-                conf = float(box.conf[0])
-                cv2.rectangle(img, (x1, y1), (x2, y2), (0,255,0), 2)
-                cv2.putText(img, f"{label} {conf:.2f}", (x1, y1-10),
+                cls = model.names[int(box.cls[0])]
+                cv2.rectangle(img_small, (x1, y1), (x2, y2), (0,255,0), 2)
+                cv2.putText(img_small, cls, (x1, y1-10),
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
-        return img
+        return cv2.cvtColor(img_small, cv2.COLOR_BGR2RGB)
 
+# Start webcam streaming
 webrtc_streamer(
-    key="example",
+    key="yolo-live",
     video_processor_factory=YOLOProcessor,
     rtc_configuration=RTC_CONFIGURATION,
     media_stream_constraints={"video": True, "audio": False},
