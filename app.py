@@ -1,25 +1,21 @@
 import streamlit as st
 from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 import cv2
-import numpy as np
 from ultralytics import YOLO
 
-# Load YOLOv8 model
+# Load YOLOv8
 model = YOLO("yolov8n.pt")
 
-st.title("YOLOv8 Live Detection (Web)")
+st.title("YOLOv8 Live Detection")
 
-# RTC configuration for WebRTC
 RTC_CONFIGURATION = RTCConfiguration(
     {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
 )
 
-# Video processor class
 class YOLOProcessor(VideoProcessorBase):
     def recv(self, frame):
         img = frame.to_ndarray(format="bgr24")
-        # Resize for faster processing
-        img_small = cv2.resize(img, (640, 360))
+        img_small = cv2.resize(img, (640, 360))  # faster processing
         results = model(img_small, conf=0.4, verbose=False)
         for r in results:
             for box in r.boxes:
@@ -30,7 +26,6 @@ class YOLOProcessor(VideoProcessorBase):
                             cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
         return cv2.cvtColor(img_small, cv2.COLOR_BGR2RGB)
 
-# Start webcam streaming
 webrtc_streamer(
     key="yolo-live",
     video_processor_factory=YOLOProcessor,
