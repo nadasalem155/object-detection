@@ -1,40 +1,34 @@
 import streamlit as st
-import cv2
-from ultralytics import YOLO
+from PIL import Image
 import numpy as np
+from ultralytics import YOLO
 
-st.title("YOLOv8s Object Detection Online")
+st.title("YOLOv8s Object Detection Online (No OpenCV)")
 
-# تحميل الموديل
+# تحميل الموديل مرة واحدة
 @st.cache_resource
 def load_model():
-    return YOLO("yolov8s.pt")  # خلي الملف في نفس الفولدر
+    return YOLO("yolov8s.pt")
 
 model = load_model()
 
 # رفع صورة أو فيديو
-uploaded_file = st.file_uploader("Upload your video or image", type=["mp4", "mov", "avi", "jpg", "png"])
-
-stframe = st.empty()
+uploaded_file = st.file_uploader("Upload your image", type=["jpg", "jpeg", "png"])
 
 if uploaded_file:
-    file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
+    # قراءة الصورة
+    img = Image.open(uploaded_file).convert("RGB")
     
-    if uploaded_file.type.startswith("image"):
-        # لو الصورة
-        img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-        results = model(img)
-        annotated_img = results[0].plot()
-        stframe.image(cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB), channels="RGB")
+    # تحويل الصورة لمصفوفة NumPy لأن YOLO بيشتغل عليها
+    img_np = np.array(img)
     
-    elif uploaded_file.type.startswith("video"):
-        # لو الفيديو
-        cap = cv2.VideoCapture(uploaded_file.name)  # أونلاين ممكن نحتاج tempfile هنا أحيانًا
-        while cap.isOpened():
-            ret, frame = cap.read()
-            if not ret:
-                break
-            results = model(frame)
-            annotated_frame = results[0].plot()
-            stframe.image(cv2.cvtColor(annotated_frame, cv2.COLOR_BGR2RGB), channels="RGB")
-        cap.release()
+    # كشف الأجسام
+    results = model(img_np)
+    
+    # عمل annotate للصورة
+    annotated_img = results[0].plot()  # ترجع NumPy array
+    
+    # تحويلها مرة تانية لـ PIL Image للعرض
+    annotated_img_pil = Image.fromarray(annotated_img)
+    
+    st.image(annotated_img_pil, caption="Detected Objects", use_column_width=True)
