@@ -1,27 +1,34 @@
 import streamlit as st
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase, RTCConfiguration
 import cv2
-import numpy as np
 from ultralytics import YOLO
-from PIL import Image
 
-st.title("YOLOv8s Object Detection Online")
+# Load YOLOv8
+model = YOLO("yolov8n.pt")
 
-# رفع صورة
-uploaded_file = st.file_uploader("Upload an image", type=["jpg", "jpeg", "png"])
+st.title("YOLOv8 Live Detection")
 
-if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    image_np = np.array(image)
+RTC_CONFIGURATION = RTCConfiguration(
+    {"iceServers": [{"urls": ["stun:stun.l.google.com:19302"]}]}
+)
 
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+class YOLOProcessor(VideoProcessorBase):
+    def recv(self, frame):
+        img = frame.to_ndarray(format="bgr24")
+        img_small = cv2.resize(img, (640, 360))  # faster processing
+        results = model(img_small, conf=0.4, verbose=False)
+        for r in results:
+            for box in r.boxes:
+                x1, y1, x2, y2 = map(int, box.xyxy[0])
+                cls = model.names[int(box.cls[0])]
+                cv2.rectangle(img_small, (x1, y1), (x2, y2), (0,255,0), 2)
+                cv2.putText(img_small, cls, (x1, y1-10),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0,255,0), 2)
+        return cv2.cvtColor(img_small, cv2.COLOR_BGR2RGB)
 
-    # تحميل الموديل (YOLOv8s)
-    model = YOLO("yolov8n.pt")  # تأكدي ان الموديل موجود في المشروع أو على نفس المسار
-
-    # الكشف
-    results = model(image_np)
-
-    # رسم النتائج على الصورة
-    annotated_frame = results[0].plot()  # YOLOv8 outputs a list, نرسم على أول نتيجة
-
-    st.image(annotated_frame, caption="Detected Objects", use_column_width=True)
+webrtc_streamer(
+    key="yolo-live",
+    video_processor_factory=YOLOProcessor,
+    rtc_configuration=RTC_CONFIGURATION,
+    media_stream_constraints={"video": True, "audio": False},
+)
