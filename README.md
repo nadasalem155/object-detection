@@ -1,6 +1,6 @@
 # 🟢 Object Detection
 
-Real-time **object detection** using **YOLOv8** on webcam input.  
+Real-time **object detection** using **YOLOv8s** on webcam input.  
 Detects people, devices, and other common objects.  
 
 Includes a **Jupyter Notebook** for easy experimentation and testing. 🖥️🎯
