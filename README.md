@@ -18,7 +18,7 @@ Perfect for experimenting with computer vision and AI. 🖥📸🤖
 
 ## 🖼 Example Output
 
-![Detection Example](images/example_detection.jpg)  
+![Detection Example](object-detection/output.jpg)  
 Replace with your actual output image.
 
 ---
