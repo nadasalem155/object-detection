@@ -16,7 +16,7 @@ if uploaded_file is not None:
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
     # تحميل الموديل (YOLOv8s)
-    model = YOLO("yolov8s.pt")  # تأكدي ان الموديل موجود في المشروع أو على نفس المسار
+    model = YOLO("yolov8n.pt")  # تأكدي ان الموديل موجود في المشروع أو على نفس المسار
 
     # الكشف
     results = model(image_np)
