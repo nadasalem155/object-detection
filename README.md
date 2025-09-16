@@ -1,24 +1,32 @@
-# 🟢 YOLOv8s Object Detection
+# 🟢 YOLOv8 Object Detection
 
-Detect objects *in real-time* or *on static images* using *YOLOv8 small (yolov8s.pt)*!  
-Perfect for experimenting with computer vision and AI. 🖥📸🤖
+This project demonstrates object detection using **two YOLOv8 models**:  
+
+- ⚡ **YOLOv8n (Nano)** → used for **real-time webcam detection** (faster, lighter, good for live streams).  
+- 🎯 **YOLOv8s (Small)** → used for **static image detection** (more accurate, better for single images).  
+
+With this setup, you can **balance speed and accuracy** depending on whether you are detecting objects in a live video stream or analyzing static images. 🖥📸🤖  
 
 ---
 
 ## ✨ Features
 
-- 🖥 *Live Webcam Detection*: Smooth threaded video capture  
-- 🖼 *Static Image Detection*: Predict objects on any image  
-- 🌈 *Color-coded Classes*: Each class has a unique color (static images)  
-- 📦 Detects multiple objects: people, devices, and more  
-- 🎨 Draws *bounding boxes* + *class labels* + *confidence scores*  
-- ⚡ Optimized for faster performance with YOLOv8s
+- 🖥 **Live Webcam Detection** → YOLOv8n for smooth real-time performance.  
+- 🖼 **Static Image Detection** → YOLOv8s for higher accuracy on single images.  
+- 🌈 **Color-coded Classes (Static Images)** → Each class has a unique color for clarity.  
+- 📦 **Multiple Objects Detection** → People, devices, everyday items, and more.  
+- 🎨 **Bounding Boxes + Labels + Confidence Scores** → Easy-to-read overlay.  
+- ⚡ **Optimized Performance** → Choose between YOLOv8n (speed) and YOLOv8s (accuracy).  
 
 ---
 
 ## 🖼 Example Output
 
-![Detection Example](object-detection/output.jpg)  
+### Webcam Detection (YOLOv8n)  
+Real-time bounding boxes and labels drawn directly on video frames.  
+
+### Static Image Detection (YOLOv8s)  
+![Detection Example](output.jpg)  
 
 ---
 
@@ -27,61 +35,49 @@ Perfect for experimenting with computer vision and AI. 🖥📸🤖
 - Python 3.8+  
 - OpenCV  
 - Ultralytics YOLO  
-- Matplotlib (for notebook display)
+- Matplotlib (for static image visualization)  
 
-## Install dependencies:
+### Install dependencies:
+
 pip install opencv-python ultralytics matplotlib
 
----
-
 ## 👩‍💻 How to Use
+1️⃣ Live Webcam Detection (YOLOv8n)
+Run the webcam script.
 
-1️⃣ Live Webcam Detection
+Your webcam will open and start showing detections in real time.
 
-1. Open the script or notebook cell for webcam detection.
+Press q to quit.
 
+YOLOv8n is used for fast performance on video streams.
 
-2. Run the code – the webcam will open with live object detection.
+2️⃣ Static Image Detection (YOLOv8s)
+Place your image in the project folder (e.g., input.jpg).
 
+Run the image detection script.
 
-3. Press q to quit the window.
+The processed image will display with:
 
+✅ Bounding boxes
 
-4. Enjoy watching YOLOv8s detect objects in real-time! 🎯
+✅ Class labels
 
+✅ Confidence scores
 
+✅ Unique class colors 🌈
 
-2️⃣ Static Image Detection
+The result is automatically saved as output.jpg.
 
-1. Place your image in the project folder (e.g., caption.jpg).
-
-
-2. Run the image detection script/notebook cell.
-
-
-3. The processed image will display in the notebook with:
-
-Bounding boxes
-
-Class labels
-
-Confidence scores
-
-Unique colors per class 🌈
-
-
-
-4. Image is automatically saved as example_detection.jpg (or in images/ folder).
-
-
-
-
----
+YOLOv8s is used for better accuracy on static images.
 
 📝 Notes
+Ensure the required YOLO models (yolov8n.pt and yolov8s.pt) are downloaded in your working directory.
 
-Make sure YOLOv8s (yolov8s.pt) is downloaded in your working directory.
+For better organization, save processed images inside an images/ folder.
 
-For best readability, keep output images in an images/ folder.
+Adjust confidence threshold (conf) for stricter or looser detections.
 
-Adjust confidence threshold (conf) if you want stricter or looser detection.
+Webcam detection uses threading for smoother frame capture.
+
+markdown
+Copy code
