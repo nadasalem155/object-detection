@@ -26,7 +26,7 @@ With this setup, you can **balance speed and accuracy** depending on whether you
 Real-time bounding boxes and labels drawn directly on video frames.  
 
 ### Static Image Detection (YOLOv8s)  
-![Detection Example](output.jpg)  
+![Detection Example](object-detection/output.jpg)  
 
 ---
 
