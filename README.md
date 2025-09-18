@@ -20,6 +20,15 @@ With this setup, you can **balance speed and accuracy** depending on whether you
 
 ---
 
+## 📊 Model Comparison
+
+| Model       | Speed 🚀 | Accuracy 🎯 | Best Use Case |
+|-------------|----------|-------------|---------------|
+| **YOLOv8n** (Nano) | ⚡ Very fast | ✅ Moderate | Real-time webcam detection, live streams |
+| **YOLOv8s** (Small) | 🐢 Slower | 🎯 Higher | Static image analysis, better precision |
+
+---
+
 ## 🖼 Example Output
 
 ### Webcam Detection (YOLOv8n)  
@@ -57,13 +66,9 @@ Place your image in the project folder (e.g., input.jpg).
 Run the image detection script.
 
 The processed image will display with:
-
 ✅ Bounding boxes
-
 ✅ Class labels
-
 ✅ Confidence scores
-
 ✅ Unique class colors 🌈
 
 The result is automatically saved as output.jpg.
@@ -77,4 +82,4 @@ For better organization, save processed images inside an images/ folder.
 
 Adjust confidence threshold (conf) for stricter or looser detections.
 
-Webcam detection uses threading for smoother frame capture.
+Webcam detection uses threading for smoother frame capture
