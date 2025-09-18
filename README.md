@@ -70,7 +70,7 @@ The result is automatically saved as output.jpg.
 
 YOLOv8s is used for better accuracy on static images.
 
-📝 Notes
+## 📝 Notes
 Ensure the required YOLO models (yolov8n.pt and yolov8s.pt) are downloaded in your working directory.
 
 For better organization, save processed images inside an images/ folder.
@@ -78,6 +78,3 @@ For better organization, save processed images inside an images/ folder.
 Adjust confidence threshold (conf) for stricter or looser detections.
 
 Webcam detection uses threading for smoother frame capture.
-
-markdown
-Copy code
